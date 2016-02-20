@@ -1,18 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <title>Treehouse Logo in three.js</title>
-  <meta charset="utf-8">
-</head>
-<body style="margin: 0;">
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r74/three.min.js"></script>
-  <script src="js/OrbitControls.js"></script>
-  <script src="js/cell.js"></script>
-
-  <script>
-
-    // Set up the scene, camera, and renderer as global variables.
+ // Set up the scene, camera, and renderer as global variables.
     var scene, camera, renderer;
     var N = 10;
     var cells = new Array();
@@ -69,6 +55,9 @@
       var len = N * N;
       for (var i = 0; i < len; i++) {
         cells[i] = new Cell();
+        var ran = Math.random().toFixed();
+        cells[i].alive = ran;
+        console.log(cells[i].alive);
       }
 
       // Add box mesh per child
@@ -87,9 +76,6 @@
           mesh.position.x = i * 2;
           mesh.position.y = j * 2;
           mesh.position.z = 0;
-          mesh.visible = true;
-
-
           scene.add(mesh);
         }
       }
@@ -108,8 +94,10 @@
     
 
       for (var i = 0; i < N*N; i++) {
-          if (cells[i].alive === 0) {
+        if (cells[i].alive == 0) {
             scene.children[2 + i].visible = false;
+          } else {
+            scene.children[2 + i].visible = true;
           }
       }
 
@@ -118,8 +106,3 @@
       renderer.render(scene, camera);
 
     }
-
-  </script>
-
-</body>
-</html>
