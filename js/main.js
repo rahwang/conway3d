@@ -4,7 +4,6 @@
     var cells = new Array();
     var time = parseInt(0);
 
-
     init();
     animate();
 
@@ -121,8 +120,10 @@
       for (var i = 0; i < N*N; i++) {
         if ((cells[i].neighbors == 3) || (cells[i].alive && cells[i].neighbors == 2)) {
           cells[i].alive = parseInt(1);
+          cells[i].life++;
         } else {
           cells[i].alive = parseInt(0);
+          cells[i].life = parseInt(0);
         }
       }
     }
@@ -158,9 +159,16 @@
       //renderer.setClearColorHex(0x333F47, 1);
 
       // Create a light, set its position, and add it to the scene.
-      var light = new THREE.PointLight(0xffffff);
-      light.position.set(-100,200,100);
-      scene.add(light);
+
+        hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
+        hemiLight.color.setHSL( 0.6, 1, 0.6 );
+        hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+        hemiLight.position.set( 0, 500, 0 );
+        scene.add( hemiLight );
+        
+      // var light = new THREE.PointLight(0xffffff);
+      // light.position.set(-100,200,100);
+      // scene.add(light);
 
       // Load in the mesh and add it to the scene.
       //var loader = new THREE.JSONLoader();
@@ -196,8 +204,8 @@
           var material = new THREE.MeshLambertMaterial({color: 0xCC0000});
           //var material = new THREE.MeshBasicMaterial( { map: texture } );
           mesh = new THREE.Mesh(geometry, material);
-          mesh.position.x = i * 2;
-          mesh.position.y = j * 2;
+          mesh.position.x = i * 2 - N;
+          mesh.position.y = j * 2 - N;
           mesh.position.z = 0;
           scene.add(mesh);
         }
@@ -216,7 +224,7 @@
       // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
       requestAnimationFrame(animate);
     
-      if (time % 50 == 0) {
+      if (time % 10 == 0) {
         time = 1;
         updateCells();
       }
@@ -227,6 +235,10 @@
             scene.children[2 + i].visible = false;
         } else {
             scene.children[2 + i].visible = true;
+            var hue = (parseInt(cells[i].life) % 10) * 0.1;
+            //console.log(hue);
+            scene.children[2 + i].material.color.setHSL(1-hue, 1.0, 0.5);
+            scene.children[2 + i].scale.set(1, 1, 1 + hue * 10)
         }
       }
 
