@@ -1,6 +1,6 @@
 var Cell = function () {
-  this.neighbors = 0;
-  this.alive = 0;
+  this.neighbors = parseInt(0);
+  this.alive = parseInt(0);
 };
 
 var cells = new Array();
