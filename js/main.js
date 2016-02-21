@@ -388,7 +388,7 @@ function toggleMode() {
       if(dynamic_canvas) dynamic_canvas.remove();
       init();
   } else {
-    N = 15;
+    N = 12;
     agents = new Array();
     $("#interactive").addClass("selected_mode");
     $("#conway").removeClass("selected_mode");
