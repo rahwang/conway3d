@@ -31,7 +31,8 @@ h4 > span {
 }
 
 #interactive:hover,
-#conway:hover {
+#conway:hover,
+#interactive_rules > h4:hover {
 	color: rgb(0, 155, 155);
 	cursor: pointer;
 }

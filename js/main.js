@@ -7,10 +7,12 @@ var stats, scene, camera, renderer;
 var N = 100;
 var cells = new Array();
 var time = parseInt(0);
-// var scale = [65.406, 73.416, 82.407, 97.999, 110.000];
-var scale = [65.406, 77.72, 87.307, 97.999, 58.270];
+var scale_1 = [65.406, 77.72, 87.307, 97.999, 58.270];
+var scale_2 = [65.406, 73.416, 77.782, 87.307, 97.999, 110.000, 61.735];
+var scale = scale_1;
 var scale_length = scale.length;
 var isConway = true;
+var isMajorScale = true;
 
 var agents = new Array();
 var colsOn = new Array();
@@ -297,7 +299,7 @@ function init() {
       geometry.verticesNeedUpdate = true;
       // changes to the normals
       geometry.normalsNeedUpdate = true;
-      var material = new THREE.MeshLambertMaterial({color: 0xCC0000, transparent: true});
+      var material = new THREE.MeshLambertMaterial({color: 0x0000CC, transparent: true});
       //var material = new THREE.MeshBasicMaterial( { map: texture } );
       mesh = new THREE.Mesh(geometry, material);
       mesh.position.x = i * 2 - N;
@@ -321,7 +323,7 @@ function animate() {
     // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
     requestAnimationFrame(animate);
   
-    if (time % 15 == 0) {
+    if (time % 10 == 0) {
       time = 1;
       if (isConway) {
         updateCells();
@@ -398,6 +400,19 @@ function toggleMode() {
     $("#total_agents").text("Total Agents: " + agents.length);
   }
  
+}
+
+function toggleScale() {
+  isMajorScale = !isMajorScale;
+  if (isMajorScale) {
+    $("#major_scale").addClass("selected_mode");
+    $("#harmonic_minor").removeClass("selected_mode");
+    scale = scale_1;
+  } else {
+    $("#harmonic_minor").addClass("selected_mode");
+    $("#major_scale").removeClass("selected_mode");
+    scale = scale_2;
+  }
 }
 
 
