@@ -70,7 +70,7 @@ function updateAgents() {
       cells[temp*N + X].alive = 0;
       if (temp == N-1) {
         rowsOn.push(X);
-        sound.play({ pitch : scale[X % scale_length]  * 2^(X%3)});
+        sound.play({ pitch : scale[X % scale_length]  * 2^(X%4)});
       }
       pos = (temp + 1) % N;
       agents[i].pos_y = pos;
