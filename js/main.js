@@ -4,11 +4,17 @@ var armMeshes = [];
 var boneMeshes = [];
 
 var stats, scene, camera, renderer;
-var N = 50;
+var N = 100;
 var cells = new Array();
 var time = parseInt(0);
-var scale = [261.63, 293.67, 329.63, 349.23, 392.00, 440.01, 493.89, 523.26];
+// var scale = [65.406, 73.416, 82.407, 97.999, 110.000];
+var scale = [65.406, 77.72, 87.307, 97.999, 58.270];
 var scale_length = scale.length;
+var isConway = true;
+
+var agents = new Array();
+var colsOn = new Array();
+var rowsOn = new Array();
 
 var sound = new Wad({
     source : 'square', 
@@ -33,8 +39,35 @@ var sound = new Wad({
 window.onload = function() {
    init();
    animate();
+  
+   // $("#conway").toggleClass("selected_mode", isConway);
+   // $("#interactive").toggleClass("selected_mode", !isConway);
 }
-   
+
+
+function updateAgents() {
+  var pos = 0;
+  var X = 0;
+  var Y = 0;
+
+  for (var i = 0; i < agents.length; i++) {
+    if (agents[i].direction == 0) {
+      Y = agents[i].pos_y;
+      var temp = agents[i].pos_x;
+      cells[Y*N + temp].alive = 0;
+      if (temp == N-1) {
+        colsOn.push(Y);
+        sound.play({ pitch : scale[Y % scale_length]  * 2^(Y%3)});
+      }
+      pos = (temp + 1) % N;
+      agents[i].pos_x = pos;
+      cells[Y*N + pos].alive = 1;
+    } else {
+      break;
+    }
+  }
+}
+
 
 function updateCells() {
 
@@ -150,8 +183,8 @@ function updateCells() {
     if ((cells[i].neighbors == 3) || (cells[i].alive && cells[i].neighbors == 2)) {
       cells[i].alive = parseInt(1);
       cells[i].life++;
-      if (cells[i].life % 10 == 0) {
-        sound.play({ pitch : scale[i % scale_length]});
+      if (cells[i].life % 12 == 0) {
+        sound.play({ pitch : scale[i % scale_length]  * 2^(i%3)});
       } 
     } else {
       cells[i].alive = parseInt(0);
@@ -175,7 +208,12 @@ function init() {
 
   // Create a camera, zoom it out from the model a bit, and add it to the scene.
   camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 5000 );
-  camera.position.set( 0, 50, 65);
+ 
+  if (isConway) {
+    camera.position.set( 0, 110, 65);
+  } else {
+    camera.position.set(0, 60, 36);
+  }
 
   controls = new THREE.OrbitControls( camera, renderer.domElement );
   controls.autoRotate = true;
@@ -201,29 +239,34 @@ function init() {
     hemiLight.position.set( 0, 500, 0 );
     scene.add( hemiLight );
     
-  // var light = new THREE.PointLight(0xffffff);
-  // light.position.set(-100,200,100);
-  // scene.add(light);
+  
+  if (isConway) {
+    if (N < 2) {
+      N = 2;
+    }
+    var len = N * N;
+    for (var i = 0; i < len; i++) {
+      cells[i] = new Cell();
+      var ran = Math.random(0.3, 1.0).toFixed();
+      cells[i].alive = parseInt(ran);
+      //console.log(cells[i].alive);
+    }
+  } else {
+    if (N < 2) {
+        N = 2;
+      }
+      var len = N * N;
+      for (var i = 0; i < len; i++) {
+        cells[i] = new Cell();
+      }
 
-  // Load in the mesh and add it to the scene.
-  //var loader = new THREE.JSONLoader();
-  //loader.load( "models/treehouse_logo.js", function(geometry){
-  //  var material = new THREE.MeshLambertMaterial({color: 0x55B663});
-  //  mesh = new THREE.Mesh(geometry, material);
-  //  scene.add(mesh);
-  //});
-
-  // Initialize cell grid
-
-  if (N < 2) {
-    N = 2;
-  }
-  var len = N * N;
-  for (var i = 0; i < len; i++) {
-    cells[i] = new Cell();
-    var ran = Math.random(0.3, 1.0).toFixed();
-    cells[i].alive = parseInt(ran);
-    //console.log(cells[i].alive);
+      for (var i=0;  i < N/2; i++) {
+        var agent = new Agent();
+        agent.pos_x = parseInt((Math.random() * (N-1)).toFixed());
+        agent.pos_y = i;
+        agent.direction = 0;
+        agents.push(agent);
+      }
   }
 
   // Add box mesh per child
@@ -246,7 +289,7 @@ function init() {
     }
   }
 
-  var geometry = new THREE.BoxGeometry( 120, 20, 120 );
+  var geometry = new THREE.BoxGeometry( 300, 20, 300 );
   var material = new THREE.MeshNormalMaterial();
   var mesh = new THREE.Mesh( geometry, material );
   mesh.position.set( 0, -10, 0 );
@@ -256,15 +299,20 @@ function init() {
 }
 
   // Renders the scene and updates the render as needed.
-  function animate() {
+function animate() {
 
     // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
     requestAnimationFrame(animate);
   
     if (time % 15 == 0) {
       time = 1;
-      updateCells();
+      if (isConway) {
+       updateCells();
+      } else {
+        updateAgents();
+      }
     }
+
     time++;
 
     for (var i = 0; i < N*N; i++) {
@@ -280,10 +328,47 @@ function init() {
       }
     }
 
+    if (!isConway) {
+      for (var i = 0; i < colsOn.length; i++) {
+        for (var j = 0; j < N; j++) {
+          scene.children[2 + colsOn[i]*N + j].visible = true; 
+        }
+      }
+      for (var i = 0; i < colsOn.length; i++) {
+        colsOn.pop();
+      }
+    }
+
      // Render the scene.
     controls.update();
 
     renderer.render(scene, camera);
 
-  }
+}
 
+
+function toggleMode() {
+  console.log("toggled");
+  isConway = !isConway;
+  if (isConway) {
+     $("#conway").addClass("selected_mode");
+     $("#interactive").removeClass("selected_mode");
+      $("#conway_rules").css("visibility", "visible");
+     
+      N = 100;
+      var dynamic_canvas = $('canvas');
+if(dynamic_canvas) dynamic_canvas.remove();
+      init();
+  } else {
+    N = 10;
+    agents = new Array();
+    $("#interactive").addClass("selected_mode");
+    $("#conway").removeClass("selected_mode");
+    $("#conway_rules").css("visibility", "hidden");
+
+      var dynamic_canvas = $('canvas');
+    if(dynamic_canvas) dynamic_canvas.remove();
+    init();
+  }
+ 
+}

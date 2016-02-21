@@ -1,0 +1,36 @@
+#title_card {
+	font-family: sans-serif;
+	max-width: 350px;
+	background-color: rgba(0,0,0,0.7);
+	color: #fff;
+	position: fixed;
+	top: 5px;
+	left: 0;
+	padding: 1em;
+}
+
+#title_card > ul > li {
+	margin-bottom: 0.3em;
+}
+
+h3 {
+	font-weight: 300;
+}
+
+p {
+	font-weight: 200;
+}
+
+h4 > span {
+	padding: 0.2em;
+}
+
+#interactive:hover,
+#conway:hover {
+	color: rgb(0, 155, 155);
+	cursor: pointer;
+}
+
+.selected_mode {
+	color: rgb(0, 255, 255);
+}

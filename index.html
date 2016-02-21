@@ -3,50 +3,31 @@
 <head>
   <title>Conway 3D</title>
   <meta charset="utf-8">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r74/three.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r74/three.min.js"></script>
   <script src="js/Projector.js"></script>
   <script src="js/OrbitControls.js"></script>
   <script src="http://rawgit.com/mrdoob/three.js/dev/examples/js/libs/stats.min.js" ></script>
   <script src="http://js.leapmotion.com/leap-0.6.4.js" ></script>
+  <script src = "js/agent.js"></script>
   <script src="js/cell.js"></script>
   <script src="js/wad.js"></script>
   <script src="js/main.js"></script>
+  <link rel="stylesheet" href="main.css">
 
 </head>
 <body style="margin: 0;">
 
-  <script type="x-shader/x-vertex" id="vertexShader">
-
-      varying vec3 vWorldPosition;
-
-      void main() {
-
-        vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
-        vWorldPosition = worldPosition.xyz;
-
-        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-
-      }
-
-    </script>
-
-    <script type="x-shader/x-fragment" id="fragmentShader">
-
-      uniform vec3 topColor;
-      uniform vec3 bottomColor;
-      uniform float offset;
-      uniform float exponent;
-
-      varying vec3 vWorldPosition;
-
-      void main() {
-
-        float h = normalize( vWorldPosition + offset ).y;
-        gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
-
-      }
-
-    </script>
+<div id="title_card">
+<h3> <span id = "conway" class = "selected_mode" onclick="toggleMode();">Conway's Game of Life</span> | <span id ="interactive" onclick = "toggleMode();"> User-based </h3>
+<div id = "conway_rules">
+<p>Under-population: Any live cell with fewer than two live neighbours dies</p>
+<p>Next-generation: Any live cell with two or three live neighbours lives on</p>
+<p>Over-population: Any live cell with more than three live neighbours dies </p>
+<p>Reproduction: Any dead cell with exactly three live neighbours becomes a live cell</p>
+</ul>
+</div>
+</div>
 
 </body>
 </html>
