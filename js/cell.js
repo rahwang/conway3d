@@ -3,9 +3,3 @@ var Cell = function () {
   this.alive = parseInt(0);
   this.life = parseInt(0);
 };
-
-var cells = new Array();
-
-for (var i = 0; i < cells.length; i++) {
-	cells[i] = new Cell();
-}
