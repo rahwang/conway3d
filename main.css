@@ -9,6 +9,11 @@
 	padding: 1em;
 }
 
+#title_card > h3 {
+	background-color: rgba(0, 0, 0, 0.9);
+	padding :0.5em;
+}
+
 #title_card > ul > li {
 	margin-bottom: 0.3em;
 }
@@ -34,3 +39,26 @@ h4 > span {
 .selected_mode {
 	color: rgb(0, 255, 255);
 }
+
+#interactive_rules {
+	text-align: center;
+	display: none;
+}
+
+#interactive_rules > h3{
+	padding: 0.4em;
+	border: solid 1px rgb(0,255,255);
+	font-weight: 200;
+	text-align: center;
+}
+
+#interactive_rules > h3:hover {
+	background-color: rgba(0,255,255, 0.5);
+	cursor: pointer;
+}
+
+#interactive_rules > p {
+	text-decoration: underline;
+}
+
+

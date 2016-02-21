@@ -19,14 +19,20 @@
 <body style="margin: 0;">
 
 <div id="title_card">
-<h3> 
-  <span id = "conway" class = "selected_mode" onclick="toggleMode();">Conway's Game of Life</span> | <span id ="interactive" onclick = "toggleMode();"> User-based </h3>
-<div id = "conway_rules">
-  <p>Under-population: Any live cell with fewer than two live neighbours dies</p>
-  <p>Next-generation: Any live cell with two or three live neighbours lives on</p>
-  <p>Over-population: Any live cell with more than three live neighbours dies </p>
-  <p>Reproduction: Any dead cell with exactly three live neighbours becomes a live cell</p>
-</div>
+  <h3> 
+  <span id = "conway" class = "selected_mode" onclick="toggleMode();">Conway's Game of Life</span> | <span id ="interactive" onclick = "toggleMode();"> Free Play 
+  </h3>
+  <div id = "conway_rules">
+    <p>Under-population: Any live cell with fewer than two live neighbours dies</p>
+    <p>Next-generation: Any live cell with two or three live neighbours lives on</p>
+    <p>Over-population: Any live cell with more than three live neighbours dies </p>
+    <p>Reproduction: Any dead cell with exactly three live neighbours becomes a live cell</p>
+  </div>
+  <div id = "interactive_rules">
+    <h3 id="ran_x" onclick="addRandomAgent(0);">Add Random Agent in X-Direction</h3>
+    <h3 id="ran_y" onclick="addRandomAgent(1);">Add Random Agent in Y-Direction</h3>
+    <p id="total_agents"></p>
+  </div>
 </div>
 
 </body>

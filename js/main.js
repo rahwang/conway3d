@@ -89,8 +89,9 @@ function addRandomAgent(dim) {
   var agent = new Agent();
   agent.pos_x = parseInt((Math.random() * (N-1)).toFixed());
   agent.pos_y = parseInt((Math.random() * (N-1)).toFixed());
-  agent.direction = 1;
+  agent.direction = dim;
   agents.push(agent);
+  $("#total_agents").text("Total Agents: " + agents.length);
 }
 
 function updateCells() {
@@ -284,22 +285,6 @@ function init() {
         cells[i] = new Cell();
         cells[i].alive = 0;
       }
-
-      for (var i=0;  i < N/2; i++) {
-        var agent = new Agent();
-        agent.pos_x = parseInt((Math.random() * (N-1)).toFixed());
-        agent.pos_y = i;
-        agent.direction = 0;
-        agents.push(agent);
-      }
-
-      for (var i=0;  i < N/2; i++) {
-        var agent = new Agent();
-        agent.pos_x = parseInt((Math.random() * (N-1)).toFixed());
-        agent.pos_y = i;
-        agent.direction = 1;
-        agents.push(agent);
-      }
   }
 
   // Add box mesh per child
@@ -394,22 +379,25 @@ function toggleMode() {
   if (isConway) {
      $("#conway").addClass("selected_mode");
      $("#interactive").removeClass("selected_mode");
-      $("#conway_rules").css("visibility", "visible");
-     
+      $("#conway_rules").css("display", "block"); 
+      $("#interactive_rules").css("display", "none");
       N = 100;
       var dynamic_canvas = $('canvas');
-if(dynamic_canvas) dynamic_canvas.remove();
+      if(dynamic_canvas) dynamic_canvas.remove();
       init();
   } else {
-    N = 10;
+    N = 15;
     agents = new Array();
     $("#interactive").addClass("selected_mode");
     $("#conway").removeClass("selected_mode");
-    $("#conway_rules").css("visibility", "hidden");
-
-      var dynamic_canvas = $('canvas');
+    $("#conway_rules").css("display", "none");
+    $("#interactive_rules").css("display", "block");
+    var dynamic_canvas = $('canvas');
     if(dynamic_canvas) dynamic_canvas.remove();
     init();
+    $("#total_agents").text("Total Agents: " + agents.length);
   }
  
 }
+
+
