@@ -323,7 +323,7 @@ function animate() {
     // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
     requestAnimationFrame(animate);
   
-    if (time % 10 == 0) {
+    if (time % 15 == 0) {
       time = 1;
       if (isConway) {
         updateCells();
