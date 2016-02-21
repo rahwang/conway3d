@@ -61,13 +61,37 @@ function updateAgents() {
       }
       pos = (temp + 1) % N;
       agents[i].pos_x = pos;
-      cells[Y*N + pos].alive = 1;
+      cells[Y*N + pos].alive += 1;
     } else {
-      break;
+      X = agents[i].pos_x;
+      var temp = agents[i].pos_y;
+      cells[temp*N + X].alive = 0;
+      if (temp == N-1) {
+        rowsOn.push(X);
+        sound.play({ pitch : scale[X % scale_length]  * 2^(X%3)});
+      }
+      pos = (temp + 1) % N;
+      agents[i].pos_y = pos;
+      cells[pos*N + X].alive += 1;
     }
   }
 }
 
+function addAgent(dim, x, y) {
+  var agent = new Agent();
+  agent.pos_x = x;
+  agent.pos_y = y;
+  agent.direction = dim;
+  agents.push(agent);
+}
+
+function addRandomAgent(dim) {
+  var agent = new Agent();
+  agent.pos_x = parseInt((Math.random() * (N-1)).toFixed());
+  agent.pos_y = parseInt((Math.random() * (N-1)).toFixed());
+  agent.direction = 1;
+  agents.push(agent);
+}
 
 function updateCells() {
 
@@ -258,6 +282,7 @@ function init() {
       var len = N * N;
       for (var i = 0; i < len; i++) {
         cells[i] = new Cell();
+        cells[i].alive = 0;
       }
 
       for (var i=0;  i < N/2; i++) {
@@ -265,6 +290,14 @@ function init() {
         agent.pos_x = parseInt((Math.random() * (N-1)).toFixed());
         agent.pos_y = i;
         agent.direction = 0;
+        agents.push(agent);
+      }
+
+      for (var i=0;  i < N/2; i++) {
+        var agent = new Agent();
+        agent.pos_x = parseInt((Math.random() * (N-1)).toFixed());
+        agent.pos_y = i;
+        agent.direction = 1;
         agents.push(agent);
       }
   }
@@ -295,7 +328,6 @@ function init() {
   mesh.position.set( 0, -10, 0 );
   scene.add( mesh );
 
-  updateCells();
 }
 
   // Renders the scene and updates the render as needed.
@@ -307,7 +339,7 @@ function animate() {
     if (time % 15 == 0) {
       time = 1;
       if (isConway) {
-       updateCells();
+        updateCells();
       } else {
         updateAgents();
       }
@@ -336,6 +368,15 @@ function animate() {
       }
       for (var i = 0; i < colsOn.length; i++) {
         colsOn.pop();
+      }
+
+      for (var i = 0; i < rowsOn.length; i++) {
+        for (var j = 0; j < N; j++) {
+          scene.children[2 + j*N + rowsOn[i]].visible = true; 
+        }
+      }
+      for (var i = 0; i < rowsOn.length; i++) {
+        rowsOn.pop();
       }
     }
 
